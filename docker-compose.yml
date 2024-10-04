@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:15.3
+    container_name: trellux
+    restart: always
+    ports:
+      - 4321:5432
+    environment:
+      - POSTGRES_USER=developer
+      - POSTGRES_PASSWORD=654321
+      - POSTGRES_DB=trellux-db
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  
+  pgadminer4:
+    user: root
+    image: dpage/pgadmin4
+    container_name: pgadminer4
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8081:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=developer@trellux.com
+      - PGADMIN_DEFAULT_PASSWORD=654321
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+      - ./pgadmin:/certs/server.cert
+      - ./pgadmin:/certs/server.key
+      - ./pgadmin:/pgadmin4/servers.json
